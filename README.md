@@ -1,4 +1,4 @@
-# AI - A Prompt manager for LLMs
+# PromptActions - A Prompt Engine and Manager for LLMs
 
 AI a is a command-line utility that provides an easy interface for LLM (Language Model API) services, coupled to a 
 git backed prompt management functionality. It aims to make prompts shareable and reusable, while serving as a backend

@@ -1,3 +1,5 @@
+import datetime
+import json
 import os
 from jinja2 import Environment, FileSystemLoader
 
@@ -14,7 +16,7 @@ def list_prompts(path):
     return prompts
 
 
-def run(base_path, prompt_name, prompt_variables):
+def generate(base_path, prompt_name, prompt_variables):
     template_path = os.path.join(base_path, prompt_name)
     if not os.path.isfile(template_path):
         raise FileNotFoundError(f"Prompt was not found (looking for {template_path})")
@@ -25,4 +27,18 @@ def run(base_path, prompt_name, prompt_variables):
     return template.render(**prompt_variables)
 
 
+def save_history(path: str , action_name: str, prompt: str, result: str) -> None:
+    """Saves the history of the prompt.
 
+    Args:
+        path: The path to save the history.
+        action_name: The name of the action.
+        prompt: The prompt.
+        result: The result.
+
+    """
+    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    file_name = f"{now}_{action_name}.json"
+    file_path = os.path.join(path, file_name)
+    with open(file_path, 'w') as file:
+        json.dump({'prompt': prompt, 'result': result, 'timestamp': now}, file)

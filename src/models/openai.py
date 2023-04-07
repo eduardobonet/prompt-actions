@@ -14,7 +14,7 @@ class OpenAiModel(Model):
         request_params = {
             'model': self.model_name,
             'prompt': prompt,
-            'max_tokens': 50,
+            'max_tokens': 500,
             'echo': True
         }
 

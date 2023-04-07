@@ -1,5 +1,5 @@
-from .model_fetcher import ModelFetcher as BaseFetcher
-from .model import Model
+from prompter.models.model_fetcher import ModelFetcher as BaseFetcher
+from prompter.models.model import Model
 import os
 import requests
 
@@ -24,8 +24,8 @@ class OpenAiModel(Model):
         }
         print(request_params)
         response = requests.post(self.open_ai_url, json=request_params, headers=headers)
-
-        return response.json()
+        
+        return response.json()['choices'][0]['text']
 
 
 class ModelFetcher(BaseFetcher):

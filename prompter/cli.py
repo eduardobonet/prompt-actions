@@ -3,8 +3,8 @@ import sys
 import json
 from typing import List
 import click
-import prompt
-from models.model_fetcher import ModelFetcher
+import prompter.prompt as prompt
+from prompter.models.model_fetcher import ModelFetcher
 
 BASE_PROMPTER_PATH = os.path.expanduser('~/.pa/')
 BASE_PROMPT_PATH = os.path.join(BASE_PROMPTER_PATH, 'bin')
@@ -12,11 +12,11 @@ BASE_HISTORY_PATH = os.path.join(BASE_PROMPTER_PATH, 'history')
 
 
 @click.group()
-def promp_actions():
-    """PromptActions is a command utility that allows building on top of llms"""
+def cli():
+    """Prompter is a command utility that allows building on top of llms"""
     pass
 
-@promp_actions.command('run')
+@cli.command('run')
 @click.argument('action', required=True)
 @click.argument('input_text', nargs=-1, required=False)
 @click.option('-p', '--pipe', 'pipe_input', is_flag=True, help='Reads input from stdin.')
@@ -39,8 +39,8 @@ def run(action: str, input_text: List[str], pipe_input: bool, json_input: bool, 
     else:
         input_text = ' '.join(input_text)
 
-    prompt_variables = json.loads(input_text) if json_input else {'prompter.content': input_text}
-    prompt_variables['prompter.verbosity'] = verbose
+    prompt_variables = json.loads(input_text) if json_input else {'prompter__content': input_text}
+    prompt_variables['prompter__verbosity'] = verbose
 
     parsed_prompt = prompt.generate(BASE_PROMPT_PATH, action, prompt_variables)
 
@@ -60,9 +60,9 @@ def ls():
     click.echo("\n".join(prompt.list_prompts(BASE_PROMPT_PATH)))
 
 
-promp_actions.add_command(run)
-promp_actions.add_command(ls)
+cli.add_command(run)
+cli.add_command(ls)
 
 if __name__ == '__main__':
-    promp_actions()
+    cli()
 
